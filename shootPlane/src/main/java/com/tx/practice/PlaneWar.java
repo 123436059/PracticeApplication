@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.tx.practice.activity.MainActivity;
 import com.tx.practice.entity.Bullet;
 import com.tx.practice.entity.Enemy;
 import com.tx.practice.entity.Hero;
@@ -84,7 +85,6 @@ public class PlaneWar extends FrameLayout {
         mHero.getViewTreeObserver().addOnGlobalLayoutListener(new AddHeroListener(mHero));
         mHero.setVisibility(View.VISIBLE);
         addView(mHero);
-
     }
 
     private void generateEnemy() {
@@ -219,10 +219,8 @@ public class PlaneWar extends FrameLayout {
                     break;
 
                 case MSG_BULLET:
-
+                    generateBullet();
                     break;
-
-
             }
         }
     };
@@ -234,5 +232,39 @@ public class PlaneWar extends FrameLayout {
     public void saveScore() {
         //TODO save score
 
+    }
+
+    public void clearAll() {
+        handler.removeMessages(MSG_BULLET);
+        handler.removeMessages(MSG_ENEMY);
+
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = getChildAt(i);
+            if (view instanceof Enemy) {
+                Enemy enemy = (Enemy) view;
+                enemy.stopAnimation();
+            } else if (view instanceof Bullet) {
+                Bullet bullet = (Bullet) view;
+                bullet.stopAnimation();
+            }
+        }
+        removeAllViews();
+        resetScore();
+    }
+
+    public void end() {
+        clearAll();
+        MainActivity activity = (MainActivity) getContext();
+        activity.finish();
+    }
+
+    private void resetScore() {
+        //TODO resetScore
+
+    }
+
+    public void increaseScore() {
+        //TODO add Score
     }
 }

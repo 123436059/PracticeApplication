@@ -16,6 +16,7 @@ import com.tx.practice.R;
 public class Bullet extends BaseEntity {
 
     private Hero hero;
+    private boolean isCanShot =true;
 
     public Bullet(Context context) {
         super(context);
@@ -69,5 +70,13 @@ public class Bullet extends BaseEntity {
         if (animator != null) {
             animator.cancel();
         }
+    }
+
+    public boolean isCanShot() {
+        return isCanShot;
+    }
+
+    public void setCanShot(boolean canShot) {
+        this.isCanShot = canShot;
     }
 }

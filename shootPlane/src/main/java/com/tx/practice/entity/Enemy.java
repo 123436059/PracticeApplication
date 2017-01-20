@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -11,6 +12,7 @@ import com.tx.practice.PlaneWar;
 import com.tx.practice.R;
 import com.tx.practice.Utils.Utils;
 import com.tx.practice.animator.FlyAnimator;
+import com.tx.practice.dialog.GameDialog;
 
 /**
  * Created by Taxi on 2017/1/19.
@@ -72,20 +74,68 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
 
     @Override
     public void onFly(float translationY) {
-        Hero hero = planeWar.getHero();
+        dealWithPlane();
+        dealWithBullet();
+    }
 
+    private void dealWithBullet() {
+        for (int i = 0; i < planeWar.getChildCount(); i++) {
+            View view = planeWar.getChildAt(i);
+            if (view instanceof Bullet) {
+                Bullet bullet = (Bullet) view;
+                if (bullet.isCanShot()) {
+                    if (isShareRect(bullet, this) || isInRect(bullet, this)) {
+                        setShotCount(getShotCount() + 1);
+                        bullet.setCanShot(false);
+                        bullet.setVisibility(View.INVISIBLE);
+                        bullet.stopAnimation();
+                    }
+
+                    if (getShotCount() >= MAX_SHOT_COUNT) {
+                        planeWar.boomEnemy(getTranslationX(), getTranslationY());
+                        stopAnimation();
+                        planeWar.increaseScore();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void dealWithPlane() {
+        Hero hero = planeWar.getHero();
         if (hero != null && hero.getVisibility() == View.VISIBLE && getParent() != null) {
             if (isShareRect(this, hero) || isInRect(this, hero)) {
                 planeWar.boomEnemy(getTranslationX(), getTranslationY());
-                flyAnimator.cancel();
+                stopAnimation();
                 planeWar.boomHero();
                 planeWar.removeBullet();
 
                 planeWar.hideHero();
                 planeWar.saveScore();
-
+                showDialog();
             }
         }
+    }
+
+    private void showDialog() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Utils.showGameDialog(getContext(), new GameDialog.onButtonClickListener() {
+                    @Override
+                    public void onExitClick() {
+                        planeWar.end();
+                    }
+
+                    @Override
+                    public void onRestartClick() {
+                        planeWar.clearAll();
+                        planeWar.start();
+                    }
+                });
+            }
+        }, 1500);
     }
 
     private boolean isInRect(View v1, View v2) {
@@ -119,10 +169,22 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
         this.targetY = targetY;
     }
 
+
+    /**
+     * 对于enemy来说，停止动画就移除自己。这个变量来控制。
+     */
     @Override
     public void stopAnimation() {
         if (flyAnimator != null) {
             flyAnimator.cancel();
         }
+    }
+
+    public int getShotCount() {
+        return shotCount;
+    }
+
+    public void setShotCount(int shotCount) {
+        this.shotCount = shotCount;
     }
 }

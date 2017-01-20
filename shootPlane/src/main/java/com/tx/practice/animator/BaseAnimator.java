@@ -16,6 +16,8 @@ public abstract class BaseAnimator {
 
     public BaseAnimator(View target, float starValue, float endValue) {
         this.target = target;
+
+        /*处理移动*/
         this.animator = ValueAnimator.ofFloat(starValue, endValue);
 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
