@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -13,6 +14,7 @@ import com.tx.practice.R;
 import com.tx.practice.Utils.Utils;
 import com.tx.practice.animator.FlyAnimator;
 import com.tx.practice.dialog.GameDialog;
+import com.utill.tx.txlibrary.Log.L;
 
 /**
  * Created by Taxi on 2017/1/19.
@@ -56,7 +58,6 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
                 if (war != null) {
                     war.removeView(Enemy.this);
                 }
-
             }
 
             @Override
@@ -155,6 +156,15 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
         boolean isTopIn = rect1.top >= rect2.top && rect1.top <= rect2.bottom;
         boolean isRightIn = rect1.right >= rect2.left && rect1.right <= rect2.right;
         boolean isBottomIn = rect1.bottom >= rect2.top && rect1.bottom <= rect2.bottom;
+        L.d("isLeftIn=" + isLeftIn);
+        L.d("isTopIn=" + isTopIn);
+        L.d("isRightIn=" + isRightIn);
+        L.d("isBottomIn=" + isBottomIn);
+        L.d("isTopIn && isLeftIn=" + (isTopIn && isLeftIn));
+        L.d("isTopIn && isRightIn=" + (isTopIn && isRightIn));
+        L.d("isLeftIn && isTopIn=" + (isLeftIn && isTopIn));
+        L.d("isLeftIn && isBottomIn=" + (isLeftIn && isBottomIn));
+
         return (isLeftIn && isTopIn) || (isLeftIn && isBottomIn)
                 || (isRightIn && isTopIn) || (isRightIn && isBottomIn)
                 || (isTopIn && isLeftIn) || (isTopIn && isRightIn)
@@ -168,7 +178,6 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
     public void setTargetY(int targetY) {
         this.targetY = targetY;
     }
-
 
     /**
      * 对于enemy来说，停止动画就移除自己。这个变量来控制。

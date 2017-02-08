@@ -26,7 +26,10 @@ public class AddBoomListener extends AddEntityListener<View> {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ((ViewGroup) t.getParent()).removeView(t);
+                    ViewGroup parent = (ViewGroup) t.getParent();
+                    if (parent != null) {
+                        parent.removeView(t);
+                    }
                 }
             }, 601);
         }

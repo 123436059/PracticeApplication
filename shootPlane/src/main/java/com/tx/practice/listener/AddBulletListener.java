@@ -24,7 +24,7 @@ public class AddBulletListener extends AddEntityListener<View> {
         bullet.setTranslationX(hero.getTranslationX() + hero.getWidth() / 2);
         bullet.setTranslationY(hero.getTranslationY() - bullet.getHeight());
 
-        float targetY =- bullet.getHeight();
+        float targetY = -bullet.getHeight();
         float distance = targetY - bullet.getTranslationY();
         long duration = (long) (Math.abs(distance) * 3);
         bullet.shot(targetY, duration);

@@ -27,7 +27,7 @@ public class AddEnemyListener extends AddEntityListener<View> {
             float targetX = random.nextInt((war.getWidth() - enemy.getWidth()));
             enemy.setTranslationX(targetX);
             enemy.setDuration(4000 + new Random().nextInt(2000));
-            //fly target all screen
+            //fly through all screen
             enemy.setTargetY(war.getHeight() + enemy.getHeight());
             enemy.fly();
         }
