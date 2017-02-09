@@ -16,7 +16,9 @@ public abstract class AddEntityListener<T extends View> implements ViewTreeObser
 
     @Override
     public void onGlobalLayout() {
-        t.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        //TODO 之前这里搞错了，没有移除，导致一直重复添加监听，导致内存飙升，导致OOM。
+//        t.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        t.getViewTreeObserver().removeGlobalOnLayoutListener(this);
         onLayoutFinish();
     }
 

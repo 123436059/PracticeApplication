@@ -156,14 +156,14 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
         boolean isTopIn = rect1.top >= rect2.top && rect1.top <= rect2.bottom;
         boolean isRightIn = rect1.right >= rect2.left && rect1.right <= rect2.right;
         boolean isBottomIn = rect1.bottom >= rect2.top && rect1.bottom <= rect2.bottom;
-        L.d("isLeftIn=" + isLeftIn);
-        L.d("isTopIn=" + isTopIn);
-        L.d("isRightIn=" + isRightIn);
-        L.d("isBottomIn=" + isBottomIn);
-        L.d("isTopIn && isLeftIn=" + (isTopIn && isLeftIn));
-        L.d("isTopIn && isRightIn=" + (isTopIn && isRightIn));
-        L.d("isLeftIn && isTopIn=" + (isLeftIn && isTopIn));
-        L.d("isLeftIn && isBottomIn=" + (isLeftIn && isBottomIn));
+//        L.d("isLeftIn=" + isLeftIn);
+//        L.d("isTopIn=" + isTopIn);
+//        L.d("isRightIn=" + isRightIn);
+//        L.d("isBottomIn=" + isBottomIn);
+//        L.d("isTopIn && isLeftIn=" + (isTopIn && isLeftIn));
+//        L.d("isTopIn && isRightIn=" + (isTopIn && isRightIn));
+//        L.d("isLeftIn && isTopIn=" + (isLeftIn && isTopIn));
+//        L.d("isLeftIn && isBottomIn=" + (isLeftIn && isBottomIn));
 
         return (isLeftIn && isTopIn) || (isLeftIn && isBottomIn)
                 || (isRightIn && isTopIn) || (isRightIn && isBottomIn)

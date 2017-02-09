@@ -1,6 +1,7 @@
 package com.tx.practice.entity;
 
 import android.content.Context;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
 import com.nineoldandroids.animation.Animator;
@@ -8,6 +9,7 @@ import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.tx.practice.PlaneWar;
 import com.tx.practice.R;
+import com.utill.tx.txlibrary.Log.L;
 
 /**
  * Created by Taxi on 2017/1/19.
@@ -46,8 +48,9 @@ public class Bullet extends BaseEntity {
                         @Override
                         public void onAnimationCancel(Animator animation) {
                             bitmap.recycle();
-                            PlaneWar war = (PlaneWar) getParent();
+                            ViewGroup war = (ViewGroup) getParent();
                             if (war != null) {
+                                L.d("移除bullet");
                                 war.removeView(Bullet.this);
                             }
                         }
@@ -55,8 +58,9 @@ public class Bullet extends BaseEntity {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             bitmap.recycle();
-                            PlaneWar war = (PlaneWar) getParent();
+                            ViewGroup war = (ViewGroup) getParent();
                             if (war != null) {
+                                L.d("移除bullet");
                                 war.removeView(Bullet.this);
                             }
                         }

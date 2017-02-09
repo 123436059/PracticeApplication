@@ -21,6 +21,7 @@ import com.tx.practice.listener.AddBoomListener;
 import com.tx.practice.listener.AddBulletListener;
 import com.tx.practice.listener.AddEnemyListener;
 import com.tx.practice.listener.AddHeroListener;
+import com.utill.tx.txlibrary.Log.L;
 
 /**
  * Created by admin on 2017/1/18.
@@ -83,8 +84,9 @@ public class PlaneWar extends FrameLayout {
           由于在onCreate里得不到控件的宽高,所以设置这样的一个监听。
           在布局完成时回调*/
         mHero.getViewTreeObserver().addOnGlobalLayoutListener(new AddHeroListener(mHero));
-        mHero.setVisibility(View.VISIBLE);
+//        mHero.setVisibility(View.VISIBLE);
         addView(mHero);
+        L.d("add hero");
     }
 
     private void generateEnemy() {
@@ -206,7 +208,7 @@ public class PlaneWar extends FrameLayout {
     }
 
     private static final int CREATE_ENEMY_DURATION = 1000;
-    private static final int CREATE_BULLET_DURATION = 1000;
+    private static final int CREATE_BULLET_DURATION = 100;
     private static final int MSG_ENEMY = 1;
     private static final int MSG_BULLET = 2;
 
