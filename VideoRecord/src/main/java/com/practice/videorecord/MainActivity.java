@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             mMediaRecorder.release();
             mMediaRecorder = null;
             mHandler.removeCallbacks(updateTimeRunnable);
+            L.d("release");
         }
     }
 
