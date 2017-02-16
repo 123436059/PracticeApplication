@@ -24,6 +24,7 @@ public class PreView extends SurfaceView implements SurfaceHolder.Callback {
         setCamera(camera);
         mHolder = getHolder();
         mHolder.addCallback(this);
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
     public void setCamera(Camera mCamera) {
@@ -33,7 +34,7 @@ public class PreView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            mCamera.setPreviewDisplay(holder);
+            mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,11 +43,6 @@ public class PreView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
         if (mHolder.getSurface() == null) {
             return;
         }
@@ -64,6 +60,11 @@ public class PreView extends SurfaceView implements SurfaceHolder.Callback {
             e.printStackTrace();
             L.d("Error starting camera preview: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
     }
 
     public void changeCamera(Camera camera) {

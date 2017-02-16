@@ -10,12 +10,14 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.practice.videorecord.record.RecordManager;
 import com.practice.videorecord.util.PathUtil;
 import com.practice.videorecord.view.PreView;
 import com.utill.tx.txlibrary.Log.L;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int TYPE_VIDEO = 0x01;
     private static final int TYPE_PIC = 0x02;
+    private static final int MSG_RECORD_TIME_INTERVAL = 0x03;
+
+    private int record_time_interval = 5 * 1000;
 
     @BindView(R.id.frame_content)
     FrameLayout frameContent;
@@ -58,7 +63,18 @@ public class MainActivity extends AppCompatActivity {
     private Camera mCamera;
     private PreView mPreView;
     private MediaRecorder mMediaRecorder;
-    private Handler mHandler;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_RECORD_TIME_INTERVAL:
+                    if (!hasMessages(MSG_RECORD_TIME_INTERVAL)) {
+                        postDelayed(recordInterval, record_time_interval);
+                    }
+                    break;
+            }
+        }
+    };
     private int timeSeconds = 0;
     private Runnable updateTimeRunnable = new Runnable() {
         @Override
@@ -76,15 +92,51 @@ public class MainActivity extends AppCompatActivity {
         return String.format(Locale.CHINESE, "%02d:%02d", min, sec);
     }
 
+    int tempI = 0;
+
+    private Runnable recordInterval = new Runnable() {
+        @Override
+        public void run() {
+            if (isRecording) {
+                Toast.makeText(MainActivity.this, "重新开始录制" + (tempI++), Toast.LENGTH_SHORT).show();
+                stopRecord();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isRecording) {
+                                    if (prepareMediaRecorder()) {
+                                        startRecord();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }).start();
+                mHandler.postDelayed(this, record_time_interval);
+            }
+        }
+    };
+
+    private void stopRecord() {
+        mMediaRecorder.stop();
+        timeSeconds = 0;
+        //updateUI
+        ivVideo.setImageResource(R.drawable.ic_video_white);
+        releaseMediaRecorder();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mHandler = new Handler();
         initPermission();
         initCamera();
         initSurfaceView();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
@@ -113,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             mCamera = Camera.open(cameraId);
         } catch (Exception e) {
             //TODO dialog处理
+            Toast.makeText(this, "打开相机失败，请稍后重试", Toast.LENGTH_SHORT).show();
             L.d("打开相机失败" + e.getMessage());
         }
     }
@@ -139,19 +192,12 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.ivVideo:
-                //抽出MediaRecorder与Camera
                 if (isRecording) {
-                    mMediaRecorder.stop();
-                    //updateUI
-                    ivVideo.setImageResource(R.drawable.ic_video_white);
-                    releaseMediaRecorder();
+                    stopRecord();
                 } else {
                     if (prepareMediaRecorder()) {
-                        mMediaRecorder.start();
-                        isRecording = true;
-                        mHandler.post(updateTimeRunnable);
-                        //updateUI
-                        ivVideo.setImageResource(R.drawable.ic_video_white_on);
+                        startRecord();
+//                        mHandler.postDelayed(recordInterval, record_time_interval);
                     } else {
                         releaseMediaRecorder();
                     }
@@ -160,16 +206,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void startRecord() {
+        if (mMediaRecorder == null) {
+            return;
+        }
+        mMediaRecorder.start();
+        isRecording = true;
+        mHandler.post(updateTimeRunnable);
+        ivVideo.setImageResource(R.drawable.ic_video_white_on);
+    }
+
     private boolean prepareMediaRecorder() {
-        mMediaRecorder = new MediaRecorder();
+        if (mMediaRecorder == null) {
+            mMediaRecorder = new MediaRecorder();
+        }
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
         //TODO 增加模式选择
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
+        mMediaRecorder.setProfile(CamcorderProfile.get(getCameraId(), CamcorderProfile.QUALITY_720P));
         mMediaRecorder.setOutputFile(getMediaPath(TYPE_VIDEO));
+
+        mMediaRecorder.setMaxDuration(record_time_interval);
+
+        mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra) {
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    //录制完成，开始下一段录制
+                    stopRecord();
+                    if (prepareMediaRecorder()) {
+                        startRecord();
+                    }
+                }
+            }
+        });
+
+        mMediaRecorder.setOnErrorListener(new MediaRecorder.OnErrorListener() {
+            @Override
+            public void onError(MediaRecorder mr, int what, int extra) {
+                //TODO deal with error info.
+
+            }
+        });
+
         mMediaRecorder.setPreviewDisplay(mPreView.getHolder().getSurface());
         try {
             mMediaRecorder.prepare();
