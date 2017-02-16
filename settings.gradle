@@ -1,1 +1,1 @@
-include ':shootPlane', ':VideoRecord'
+include ':shootPlane', ':VideoRecord', ':rxoperation'

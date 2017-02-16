@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/VideoRecord" />
+            <option value="$PROJECT_DIR$/rxoperation" />
             <option value="$PROJECT_DIR$/shootPlane" />
           </set>
         </option>
