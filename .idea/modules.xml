@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/VideoRecord/VideoRecord.iml" filepath="$PROJECT_DIR$/VideoRecord/VideoRecord.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxoperation/rxoperation.iml" filepath="$PROJECT_DIR$/rxoperation/rxoperation.iml" />
       <module fileurl="file://$PROJECT_DIR$/shootPlane/shootPlane.iml" filepath="$PROJECT_DIR$/shootPlane/shootPlane.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wifip2p/wifip2p.iml" filepath="$PROJECT_DIR$/wifip2p/wifip2p.iml" />
     </modules>
   </component>
 </project>

@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/VideoRecord" />
             <option value="$PROJECT_DIR$/rxoperation" />
             <option value="$PROJECT_DIR$/shootPlane" />
+            <option value="$PROJECT_DIR$/wifip2p" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
