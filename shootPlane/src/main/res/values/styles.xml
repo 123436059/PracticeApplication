@@ -13,7 +13,7 @@
         <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
     </style>
 
-    <style name="GameDialog" parent="@android:style/Theme.Dialog">
+    <style name="GameDialog" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/DialogAnim</item>
     </style>

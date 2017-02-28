@@ -10,10 +10,8 @@ import android.view.animation.Interpolator;
  */
 
 public abstract class BaseAnimator {
-    public ValueAnimator animator;
-
+    private ValueAnimator animator;
     protected View target;
-
     public BaseAnimator(View target, float starValue, float endValue) {
         this.target = target;
 

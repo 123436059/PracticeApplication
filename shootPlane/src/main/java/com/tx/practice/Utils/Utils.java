@@ -11,7 +11,6 @@ import com.tx.practice.dialog.GameDialog;
  */
 
 public class Utils {
-
     private static GameDialog gameDialog;
     private Utils() {
 

@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.RectF;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -14,7 +13,6 @@ import com.tx.practice.R;
 import com.tx.practice.Utils.Utils;
 import com.tx.practice.animator.FlyAnimator;
 import com.tx.practice.dialog.GameDialog;
-import com.utill.tx.txlibrary.Log.L;
 
 /**
  * Created by Taxi on 2017/1/19.
@@ -28,7 +26,7 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
     private int targetY;
     private int shotCount;
 
-    protected static final int MAX_SHOT_COUNT = 8;
+    protected static final int MAX_SHOT_COUNT =4;
     private FlyAnimator flyAnimator;
 
     public Enemy(Context context) {
@@ -93,8 +91,8 @@ public class Enemy extends BaseEntity implements FlyAnimator.OnEnemyFlyListener 
                     }
 
                     if (getShotCount() >= MAX_SHOT_COUNT) {
-                        planeWar.boomEnemy(getTranslationX(), getTranslationY());
                         stopAnimation();
+                        planeWar.boomEnemy(getTranslationX(), getTranslationY());
                         planeWar.increaseScore();
                         break;
                     }

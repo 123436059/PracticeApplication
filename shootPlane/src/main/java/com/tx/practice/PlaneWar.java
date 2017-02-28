@@ -1,6 +1,7 @@
 package com.tx.practice;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -12,7 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.tx.practice.Utils.SpUtils;
 import com.tx.practice.activity.MainActivity;
 import com.tx.practice.entity.Bullet;
 import com.tx.practice.entity.Enemy;
@@ -29,10 +33,15 @@ import com.utill.tx.txlibrary.Log.L;
 
 public class PlaneWar extends FrameLayout {
 
+    private static final String KEY_SCORE = "key_score";
+
     private Paint paint;
     private int textHeight = 0;
-    private String str = "";
+    private String str = "当前分数:%s";
     private Hero mHero;
+
+    private int score = 0;
+    private TextView textView;
 
     public PlaneWar(Context context) {
         this(context, null);
@@ -49,7 +58,7 @@ public class PlaneWar extends FrameLayout {
 
     private void init() {
         paint = new Paint();
-        paint.setTextSize(16);
+        paint.setTextSize(30);
         paint.setColor(Color.WHITE);
         textHeight = getTextHeight(str);
     }
@@ -60,12 +69,27 @@ public class PlaneWar extends FrameLayout {
         return rect.height();
     }
 
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        canvas.drawText(String.format(str, score), 20, textHeight + 20, paint);
+    }
+
     public void start() {
+//        addScoreTextView();
         generateEnemy();
 
         generateHero();
 
         generateBullet();
+    }
+
+    private void addScoreTextView() {
+        textView = new TextView(getContext());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(20, 20, 0, 0);
+        textView.setLayoutParams(lp);
+        textView.setText(String.format(str, score));
     }
 
     private void generateBullet() {
@@ -233,7 +257,6 @@ public class PlaneWar extends FrameLayout {
 
     public void saveScore() {
         //TODO save score
-
     }
 
     public void clearAll() {
@@ -263,10 +286,17 @@ public class PlaneWar extends FrameLayout {
 
     private void resetScore() {
         //TODO resetScore
-
+        score = 0;
+        SpUtils.saveIntValue(getContext(), KEY_SCORE, score);
     }
 
     public void increaseScore() {
         //TODO add Score
+        score += 100;
+        postInvalidate();
+        SpUtils.saveIntValue(getContext(), KEY_SCORE, score);
+//        textView.setText(String.format(str, score));
+
+        //TODO 当score达到目标时,产生其他类型飞机
     }
 }

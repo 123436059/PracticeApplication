@@ -19,6 +19,7 @@ public class AddHeroListener extends AddEntityListener<Hero> {
     protected void onLayoutFinish() {
         Hero hero = t;
         //将hero设置到底部中心
+        L.d("设置中心");
         int parentWidth = ((ViewGroup) hero.getParent()).getWidth();
         int parentHeight = ((ViewGroup) hero.getParent()).getHeight();
         L.d("设置hero center");
