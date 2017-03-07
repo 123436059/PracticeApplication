@@ -4,9 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PracticeApplication.iml" filepath="$PROJECT_DIR$/PracticeApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/VideoRecord/VideoRecord.iml" filepath="$PROJECT_DIR$/VideoRecord/VideoRecord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/downloaddemo/downloaddemo.iml" filepath="$PROJECT_DIR$/downloaddemo/downloaddemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxoperation/rxoperation.iml" filepath="$PROJECT_DIR$/rxoperation/rxoperation.iml" />
       <module fileurl="file://$PROJECT_DIR$/shootPlane/shootPlane.iml" filepath="$PROJECT_DIR$/shootPlane/shootPlane.iml" />
-      <module fileurl="file://$PROJECT_DIR$/wifip2p/wifip2p.iml" filepath="$PROJECT_DIR$/wifip2p/wifip2p.iml" />
       <module fileurl="file://$PROJECT_DIR$/wifip2p/wifip2p.iml" filepath="$PROJECT_DIR$/wifip2p/wifip2p.iml" />
     </modules>
   </component>
