@@ -1,22 +1,45 @@
 package com.originalandtest.tx.downloaddemo.download;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+
 /**
  * Created by Taxi on 2017/3/7.
  */
 
+@Entity
 public class DownloadInfo {
-    private int id;
+    @Id(autoincrement = true)
+    private Long id;
     private String url;
     private int threadId;
-    private long block;  //每个块应该下载的大小
+    private Long block;  //每个块应该下载的大小
 
-    private int downloadProgress;//已经下载的长度
+    private Long downloadProgress;//已经下载的长度
 
-    private int maxLength; //总的长度
+    private Long maxLength; //总的长度
 
     private String fileName;
 
     private String filePath;
+
+    @Generated(hash = 931500993)
+    public DownloadInfo(Long id, String url, int threadId, long block,
+                        long downloadProgress, long maxLength, String fileName, String filePath) {
+        this.id = id;
+        this.url = url;
+        this.threadId = threadId;
+        this.block = block;
+        this.downloadProgress = downloadProgress;
+        this.maxLength = maxLength;
+        this.fileName = fileName;
+        this.filePath = filePath;
+    }
+
+    @Generated(hash = 327086747)
+    public DownloadInfo() {
+    }
 
     public long getBlock() {
         return block;
@@ -26,11 +49,11 @@ public class DownloadInfo {
         this.block = block;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -50,11 +73,11 @@ public class DownloadInfo {
         this.threadId = threadId;
     }
 
-    public int getMaxLength() {
+    public long getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(int maxLength) {
+    public void setMaxLength(long maxLength) {
         this.maxLength = maxLength;
     }
 
@@ -74,11 +97,15 @@ public class DownloadInfo {
         this.filePath = filePath;
     }
 
-    public int getDownloadProgress() {
+    public long getDownloadProgress() {
         return downloadProgress;
     }
 
-    public void setDownloadProgress(int downloadProgress) {
+    public void setDownloadProgress(long downloadProgress) {
         this.downloadProgress = downloadProgress;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

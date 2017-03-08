@@ -15,16 +15,19 @@ import java.net.URL;
 public class DownloadTask implements Runnable {
 
     private final DownloadListener listener;
-    private DownloadInfo bean;
 
     private int startPoint, endPoint, index;
+    private final DownloadInfoEngine downEngine;
+    private final DownloadInfo son;
 
-    public DownloadTask(DownloadInfo info, int index, int block, DownloadListener listener) {
-        bean = info;
+    public DownloadTask(DownloadInfo father, int index, int block, DownloadListener listener) {
         startPoint = index * block;
         endPoint = (index + 1) * block - 1;
         this.index = index;
         this.listener = listener;
+        downEngine = DownloadInfoEngine.getInstance();
+        son = downEngine.getDownloadInfo(father);
+        downEngine.insertIfNotExit(son);
     }
 
     public void start() {
@@ -35,7 +38,10 @@ public class DownloadTask implements Runnable {
     @Override
     public void run() {
         try {
-            URL u = new URL(bean.getUrl());
+
+            long progress = downEngine.getProgressByThread(son);
+            startPoint+=progress;
+            URL u = new URL(son.getUrl());
             HttpURLConnection conn = (HttpURLConnection) u.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5 * 1000);
@@ -43,17 +49,19 @@ public class DownloadTask implements Runnable {
             //只能控制单个任务。
             InputStream inputStream = conn.getInputStream();
 
-            RandomAccessFile raf = new RandomAccessFile(bean.getFilePath(), "rwd");
+            RandomAccessFile raf = new RandomAccessFile(son.getFilePath(), "rwd");
             raf.seek(startPoint);
             int len = 0;
+            long sum = progress;
             byte[] buffer = new byte[1024];
             while ((len = inputStream.read(buffer)) != -1) {
                 raf.write(buffer, 0, len);
                 listener.onProgress(len);
+                sum+=len;
                 if (DownloadManager.isPause) {
                     //保存数据
-
-
+                    son.setDownloadProgress(sum);
+                    downEngine.update(son);
                     break;
                 }
             }

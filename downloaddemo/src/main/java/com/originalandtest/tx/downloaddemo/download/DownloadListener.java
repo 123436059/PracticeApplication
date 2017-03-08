@@ -8,7 +8,7 @@ public interface DownloadListener {
 
     void onFinish();
 
-    void onProgress(int progress);
+    void onProgress(long progress);
 
     void onStart();
 
